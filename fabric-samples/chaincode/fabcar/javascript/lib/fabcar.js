@@ -10,66 +10,52 @@ class FabCar extends Contract {
 
     async initLedger(ctx) {
         console.info('============= START : Initialize Ledger ===========');
+        //
         const cars = [
             {
-                color: 'blue',
-                make: 'Toyota',
-                model: 'Prius',
-                owner: 'Tomoko',
+                carID: '123',
+                leaseeID: '456',
+                renterID: '789',
+                currentOwner: '456',
+                startTime: '12:00',
+                endTime: '13:00',
+                status: 'requested',
             },
             {
-                color: 'red',
-                make: 'Ford',
-                model: 'Mustang',
-                owner: 'Brad',
+                carID: '123a',
+                leaseeID: '456a',
+                renterID: '789a',
+                currentOwner: '456a',
+                startTime: '12:00',
+                endTime: '13:00',
+                status: 'requested',
             },
             {
-                color: 'green',
-                make: 'Hyundai',
-                model: 'Tucson',
-                owner: 'Jin Soo',
+                carID: '123b',
+                leaseeID: '456b',
+                renterID: '',
+                currentOwner: '456b',
+                startTime: '',
+                endTime: '',
+                status: 'added',
             },
             {
-                color: 'yellow',
-                make: 'Volkswagen',
-                model: 'Passat',
-                owner: 'Max',
+                carID: '123c',
+                leaseeID: '456c',
+                renterID: '',
+                currentOwner: '456c',
+                startTime: '',
+                endTime: '',
+                status: 'added',
             },
             {
-                color: 'black',
-                make: 'Tesla',
-                model: 'S',
-                owner: 'Adriana',
-            },
-            {
-                color: 'purple',
-                make: 'Peugeot',
-                model: '205',
-                owner: 'Michel',
-            },
-            {
-                color: 'white',
-                make: 'Chery',
-                model: 'S22L',
-                owner: 'Aarav',
-            },
-            {
-                color: 'violet',
-                make: 'Fiat',
-                model: 'Punto',
-                owner: 'Pari',
-            },
-            {
-                color: 'indigo',
-                make: 'Tata',
-                model: 'Nano',
-                owner: 'Valeria',
-            },
-            {
-                color: 'brown',
-                make: 'Holden',
-                model: 'Barina',
-                owner: 'Shotaro',
+                carID: '123d',
+                leaseeID: '456',
+                renterID: '',
+                currentOwner: '456',
+                startTime: '',
+                endTime: '',
+                status: 'close',
             },
         ];
 
@@ -90,15 +76,18 @@ class FabCar extends Contract {
         return carAsBytes.toString();
     }
 
-    async createCar(ctx, carNumber, make, model, color, owner) {
+    async createCar(ctx, carNumber, leaseeID, renterID, currentOwner, startTime, endTime, status) {
         console.info('============= START : Create Car ===========');
 
         const car = {
-            color,
+            carID,
             docType: 'car',
-            make,
-            model,
-            owner,
+            leaseeID,
+            renterID,
+            currentOwner,
+            startTime,
+            endTime,
+            status
         };
 
         await ctx.stub.putState(carNumber, Buffer.from(JSON.stringify(car)));
