@@ -4,16 +4,16 @@
 
 'use strict';
 
-const { Contract } = require('fabric-contract-api');
+const { Contract } = require('fabric-contract-api'), events = require("./events");
 
 class FabCar extends Contract {
 
     async initLedger(ctx) {
         console.info('============= START : Initialize Ledger ===========');
-        //
         const cars = [
+            //carKey = CAR0
             {
-                carID: '123',
+                licenseID: '123',
                 leaseeID: '456',
                 renterID: '789',
                 currentOwner: '456',
@@ -21,8 +21,9 @@ class FabCar extends Contract {
                 endTime: '13:00',
                 status: 'requested',
             },
+            //carKey = CAR1
             {
-                carID: '123a',
+                licenseID: '123a',
                 leaseeID: '456a',
                 renterID: '789a',
                 currentOwner: '456a',
@@ -30,35 +31,38 @@ class FabCar extends Contract {
                 endTime: '13:00',
                 status: 'requested',
             },
+            //carKey = CAR2
             {
-                carID: '123b',
+                licenseID: '123b',
                 leaseeID: '456b',
                 renterID: '',
                 currentOwner: '456b',
                 startTime: '',
                 endTime: '',
-                status: 'added',
+                status: 'ready',
             },
+            //carKey = CAR3
             {
-                carID: '123c',
+                licenseID: '123c',
                 leaseeID: '456c',
                 renterID: '',
                 currentOwner: '456c',
                 startTime: '',
                 endTime: '',
-                status: 'added',
+                status: 'ready',
             },
+            //carKey = CAR4
             {
-                carID: '123d',
+                licenseID: '123d',
                 leaseeID: '456',
                 renterID: '',
                 currentOwner: '456',
                 startTime: '',
                 endTime: '',
-                status: 'close',
+                status: 'ready',
             },
         ];
-
+        //carKey
         for (let i = 0; i < cars.length; i++) {
             cars[i].docType = 'car';
             await ctx.stub.putState('CAR' + i, Buffer.from(JSON.stringify(cars[i])));
@@ -67,10 +71,10 @@ class FabCar extends Contract {
         console.info('============= END : Initialize Ledger ===========');
     }
 
-    async queryCar(ctx, carNumber) {
-        const carAsBytes = await ctx.stub.getState(carNumber); // get the car from chaincode state
+    async queryCar(ctx, carKey) {
+        const carAsBytes = await ctx.stub.getState(carKey); // get the car from chaincode state
         if (!carAsBytes || carAsBytes.length === 0) {
-            throw new Error(`${carNumber} does not exist`);
+            throw new Error(`${carKey} does not exist`);
         }
         console.log(carAsBytes.toString());
         return carAsBytes.toString();
@@ -80,7 +84,7 @@ class FabCar extends Contract {
         console.info('============= START : Create Car ===========');
 
         const car = {
-            carID,
+            licenseID,
             docType: 'car',
             leaseeID,
             renterID,
@@ -124,6 +128,41 @@ class FabCar extends Contract {
                 return JSON.stringify(allResults);
             }
         }
+    }
+
+    //requestKey = 
+    async openCar (ctx, carKey, renterID, startTime) {
+        console.info("openCar Process is starting");
+
+        const carKeyAsBytes = await ctx.stub.getState(carKey); //get the car from chaincode state
+        if (!carKeyAsBytes || carKeyAsBytes.length === 0) {
+            throw new Error(`${carKey} does not exist`);
+        }
+
+        const car = JSON.parse(carKeyAsBytes.toString());
+        
+        if (car.renterID !== renterID) {
+            throw new Error(`${renterID} does not match with any car request. Please request a car first!`);
+        }
+
+        if (car.status == "open") {
+            throw new Error(`Car is already opened.`);
+        }
+            
+        //change status of car from requested to open
+        car.status = "open"
+        car.startTime = startTime.toString()
+
+    
+        //create payload object which is sent to client application & back to RPi
+        ctx.stub.setEvent(events.TransferRequested,Buffer.from(JSON.stringify({
+            statusCar: car.status,
+        })));
+        
+
+        //Change state of our car in ledger
+        await ctx.stub.putState(carKey, Buffer.from(JSON.stringify(car)));
+
     }
 
     async changeCarOwner(ctx, carNumber, newOwner) {
