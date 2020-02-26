@@ -6,9 +6,9 @@ from mfrc522 import SimpleMFRC522
 reader = SimpleMFRC522()
 
 try:
-        text = input('New data:')
-        print("Now place your tag to write")
-        reader.write(text)
+        carKey = input('Please type in the carKey you received when request this car:')
+        print("Now place your key to write")
+        reader.write(carKey)
         print("Written")
 finally:
         GPIO.cleanup()
