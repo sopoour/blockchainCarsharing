@@ -4,7 +4,7 @@
 
 'use strict';
 
-const { FileSystemWallet, Gateway } = require('fabric-network');
+const { FileSystemWallet, Gateway } = require('fabric-network'), rfidData = require("./RFID_subscribe");
 const path = require('path');
 
 const ccpPath = path.resolve(__dirname, '..', '..', 'first-network', 'connection-org1.json');
@@ -38,7 +38,8 @@ async function main() {
         // Submit the specified transaction.
         // createCar transaction - requires 5 argument, ex: ('createCar', 'CAR12', 'Honda', 'Accord', 'Black', 'Tom')
         // changeCarOwner transaction - requires 2 args , ex: ('changeCarOwner', 'CAR10', 'Dave')
-        await contract.submitTransaction('openCar', 'CAR0', '789', '12:20');
+        //TRY: add rfidData as that is the returned object in the RFID_subscribe,js so e.g. rfidData.rfidData.carKey
+        await contract.submitTransaction('openCar', rfidData.carKey, rfidData.renterID, rfidData.timestamp);
         console.log('Transaction has been submitted');
 
         // Disconnect from the gateway.
