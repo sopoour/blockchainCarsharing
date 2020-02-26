@@ -130,7 +130,9 @@ class FabCar extends Contract {
         }
     }
 
-    //requestKey = 
+    //carKey = similar to a booking number 
+    //as soon as the leasee registers a car, a carKey is generated (e.g. CAR1) which the renter will get
+    //renter types in this carKey in its app (in real life), in our case he writes it on the RFID tag
     async openCar (ctx, carKey, renterID, startTime) {
         console.info("openCar Process is starting");
 
