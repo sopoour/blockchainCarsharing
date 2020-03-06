@@ -4,8 +4,9 @@
 
 'use strict';
 
-const { FileSystemWallet, Gateway } = require('fabric-network'), rfidData = require("./RFID_subscribe");
+const { FileSystemWallet, Gateway } = require('fabric-network');
 const path = require('path');
+const mqtt = require("mqtt");
 
 const ccpPath = path.resolve(__dirname, '..', '..', 'first-network', 'connection-org1.json');
 
@@ -39,12 +40,49 @@ async function main() {
         // createCar transaction - requires 5 argument, ex: ('createCar', 'CAR12', 'Honda', 'Accord', 'Black', 'Tom')
         // changeCarOwner transaction - requires 2 args , ex: ('changeCarOwner', 'CAR10', 'Dave')
         //TRY: add rfidData as that is the returned object in the RFID_subscribe,js so e.g. rfidData.rfidData.carKey
-        await contract.submitTransaction('openCar', rfidData.carKey, rfidData.renterID, rfidData.timestamp);
-        console.log('Transaction has been submitted');
+
+        console.log("connecting to broker");
+        const client = mqtt.connect("mqtt://192.168.43.217");
+        var success = false;
+        
+        client.on("connect", () =>{
+            console.log("Subscribing");
+            client.subscribe("rfidData");
+            console.log("Please hold your tag on the RFID reader. Wait...");
+        });
+
+        client.on("message", (topic, message) =>{
+            var rfidPayload = JSON.parse(message.toString());
+            var carKeyIn = rfidPayload.carKey;
+            var renterIDIn = rfidPayload.renterID;
+            var timestampIn = rfidPayload.timestamp;
+            console.log(rfidPayload);
+
+            contract.submitTransaction('openCar', carKeyIn, renterIDIn, timestampIn);
+            success = true;
+            console.log("Success? " + success);
+            return success;
+        });
+
+        client.stream.on('error', (err) => {
+            console.log('errorMessage', err);
+            client.end()
+        });       
+
+        client.on("offline",() =>{
+            console.log("offline");
+        });
+
+        client.on("reconnect", ()=>{
+            console.log("reconnect");
+        });
 
         // Disconnect from the gateway.
-        await gateway.disconnect();
-
+        if (success === true){
+            client.end();
+            gateway.disconnect();
+        };
+           
     } catch (error) {
         console.error(`Failed to submit transaction: ${error}`);
         process.exit(1);

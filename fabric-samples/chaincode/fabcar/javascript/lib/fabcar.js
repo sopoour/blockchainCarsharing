@@ -15,7 +15,7 @@ class FabCar extends Contract {
             {
                 licenseID: '123',
                 leaseeID: '456',
-                renterID: '789',
+                renterID: '478',
                 currentOwner: '456',
                 startTime: '12:00',
                 endTime: '13:00',
@@ -25,7 +25,7 @@ class FabCar extends Contract {
             {
                 licenseID: '123a',
                 leaseeID: '456a',
-                renterID: '789a',
+                renterID: '863881349114',
                 currentOwner: '456a',
                 startTime: '12:00',
                 endTime: '13:00',
@@ -157,7 +157,7 @@ class FabCar extends Contract {
 
     
         //create payload object which is sent to client application & back to RPi
-        ctx.stub.setEvent(events.TransferRequested,Buffer.from(JSON.stringify({
+        ctx.stub.setEvent(events.TransferConfirmed,Buffer.from(JSON.stringify({
             statusCar: car.status,
         })));
         
