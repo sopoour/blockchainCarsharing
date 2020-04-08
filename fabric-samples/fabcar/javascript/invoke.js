@@ -4,7 +4,7 @@
 
 'use strict';
 
-const { FileSystemWallet, Gateway } = require('fabric-network');
+const { FileSystemWallet, Gateway } = require('fabric-network')
 const path = require('path');
 const mqtt = require("mqtt");
 
@@ -50,6 +50,7 @@ async function main() {
             client.subscribe("rfidData");
             console.log("Please hold your tag on the RFID reader. Wait...");
         });
+        
 
         client.on("message", (topic, message) =>{
             var rfidPayload = JSON.parse(message.toString());
@@ -58,9 +59,10 @@ async function main() {
             var timestampIn = rfidPayload.timestamp;
             console.log(rfidPayload);
 
-            contract.submitTransaction('openCar', carKeyIn, renterIDIn, timestampIn);
+            contract.submitTransaction('openCar', carKeyIn, renterIDIn, timestampIn);            
             success = true;
             console.log("Success? " + success);
+            //client.end()
             return success;
         });
 
@@ -81,7 +83,7 @@ async function main() {
         if (success === true){
             client.end();
             gateway.disconnect();
-        };
+        }
            
     } catch (error) {
         console.error(`Failed to submit transaction: ${error}`);

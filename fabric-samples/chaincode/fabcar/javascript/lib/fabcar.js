@@ -14,52 +14,52 @@ class FabCar extends Contract {
             //carKey = CAR0
             {
                 licenseID: '123',
-                leaseeID: '456',
+                lesseeID: '456',
                 renterID: '478',
-                currentOwner: '456',
                 startTime: '12:00',
                 endTime: '13:00',
+                carLocation: ['55.6761', '12.5683'], 
                 status: 'requested',
             },
             //carKey = CAR1
             {
                 licenseID: '123a',
-                leaseeID: '456a',
+                lesseeID: '456a',
                 renterID: '863881349114',
-                currentOwner: '456a',
                 startTime: '12:00',
                 endTime: '13:00',
-                status: 'requested',
+                carLocation: ['55.6761', '12.5683'],
+                status: 'located',
             },
             //carKey = CAR2
             {
                 licenseID: '123b',
-                leaseeID: '456b',
+                lesseeID: '456b',
                 renterID: '',
-                currentOwner: '456b',
                 startTime: '',
                 endTime: '',
-                status: 'ready',
+                carLocation: ['55.6761', '12.5683'],
+                status: 'available',
             },
             //carKey = CAR3
             {
                 licenseID: '123c',
-                leaseeID: '456c',
+                lesseeID: '456c',
                 renterID: '',
-                currentOwner: '456c',
                 startTime: '',
                 endTime: '',
-                status: 'ready',
+                carLocation: ['55.6761', '12.5683'],
+                status: 'located',
             },
             //carKey = CAR4
             {
                 licenseID: '123d',
-                leaseeID: '456',
+                lesseeID: '456',
                 renterID: '',
-                currentOwner: '456',
                 startTime: '',
                 endTime: '',
-                status: 'ready',
+                carLocation: ['55.6761', '12.5683'],
+                status: 'available',
             },
         ];
         //carKey
@@ -71,6 +71,24 @@ class FabCar extends Contract {
         console.info('============= END : Initialize Ledger ===========');
     }
 
+    async createCar(ctx, carNumber, leaseeID, renterID, currentOwner, startTime, endTime, status) {
+        console.info('============= START : Create Car ===========');
+
+        const car = {
+            licenseID,
+            docType: 'car',
+            lesseeID,
+            renterID,
+            startTime,
+            endTime,
+            carLocation,
+            status
+        };
+
+        await ctx.stub.putState(carNumber, Buffer.from(JSON.stringify(car)));
+        console.info('============= END : Create Car ===========');
+    }
+
     async queryCar(ctx, carKey) {
         const carAsBytes = await ctx.stub.getState(carKey); // get the car from chaincode state
         if (!carAsBytes || carAsBytes.length === 0) {
@@ -80,23 +98,6 @@ class FabCar extends Contract {
         return carAsBytes.toString();
     }
 
-    async createCar(ctx, carNumber, leaseeID, renterID, currentOwner, startTime, endTime, status) {
-        console.info('============= START : Create Car ===========');
-
-        const car = {
-            licenseID,
-            docType: 'car',
-            leaseeID,
-            renterID,
-            currentOwner,
-            startTime,
-            endTime,
-            status
-        };
-
-        await ctx.stub.putState(carNumber, Buffer.from(JSON.stringify(car)));
-        console.info('============= END : Create Car ===========');
-    }
 
     async queryAllCars(ctx) {
         const startKey = 'CAR0';
@@ -136,8 +137,8 @@ class FabCar extends Contract {
     async openCar (ctx, carKey, renterID, startTime) {
         console.info("openCar Process is starting");
 
-        const carKeyAsBytes = await ctx.stub.getState(carKey); //get the car from chaincode state
-        if (!carKeyAsBytes || carKeyAsBytes.length === 0) {
+        const carKeyAsBytes = await ctx.stub.getState(carKey); //get the carKey from chaincode state
+        if (!carKeyAsBytes || carKeyAsBytes.length === 0) {  // check if carKey exists
             throw new Error(`${carKey} does not exist`);
         }
 
@@ -147,15 +148,14 @@ class FabCar extends Contract {
             throw new Error(`${renterID} does not match with any car request. Please request a car first!`);
         }
 
-        if (car.status == "open") {
-            throw new Error(`Car is already opened.`);
+        if (car.status == "unlocked") {
+            throw new Error(`Car is already unlocked.`);
         }
             
         //change status of car from requested to open
-        car.status = "open"
+        car.status = "unlocked"
         car.startTime = startTime.toString()
-
-    
+        
         //create payload object which is sent to client application & back to RPi
         ctx.stub.setEvent(events.TransferConfirmed,Buffer.from(JSON.stringify({
             statusCar: car.status,
