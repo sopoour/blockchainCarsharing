@@ -1,3 +1,93 @@
+<<<<<<< HEAD
+---
+name: first-network-org1
+version: 1.0.0
+client:
+  organization: Org1
+  connection:
+    timeout:
+      peer:
+        endorser: '300'
+organizations:
+  Org1:
+    mspid: Org1MSP
+    peers:
+    - peer0.org1.example.com
+    - peer1.org1.example.com
+    certificateAuthorities:
+    - ca.org1.example.com
+peers:
+  peer0.org1.example.com:
+    url: grpcs://localhost:7051
+    tlsCACerts:
+      pem: |
+        -----BEGIN CERTIFICATE-----
+        MIICVzCCAf2gAwIBAgIQP00yHJhxKaZAaGbNKnF8+zAKBggqhkjOPQQDAjB2MQsw
+        CQYDVQQGEwJVUzETMBEGA1UECBMKQ2FsaWZvcm5pYTEWMBQGA1UEBxMNU2FuIEZy
+        YW5jaXNjbzEZMBcGA1UEChMQb3JnMS5leGFtcGxlLmNvbTEfMB0GA1UEAxMWdGxz
+        Y2Eub3JnMS5leGFtcGxlLmNvbTAeFw0yMDAzMDYxNjM1MDBaFw0zMDAzMDQxNjM1
+        MDBaMHYxCzAJBgNVBAYTAlVTMRMwEQYDVQQIEwpDYWxpZm9ybmlhMRYwFAYDVQQH
+        Ew1TYW4gRnJhbmNpc2NvMRkwFwYDVQQKExBvcmcxLmV4YW1wbGUuY29tMR8wHQYD
+        VQQDExZ0bHNjYS5vcmcxLmV4YW1wbGUuY29tMFkwEwYHKoZIzj0CAQYIKoZIzj0D
+        AQcDQgAEIFSdNlAXsBqbYtEq5VE1Hb97RuSo1U7QmhqZz2+vvyFvyefxCSSsQS43
+        jcmRmpaa1/LbGWJ10v+KBAPpfXZmjKNtMGswDgYDVR0PAQH/BAQDAgGmMB0GA1Ud
+        JQQWMBQGCCsGAQUFBwMCBggrBgEFBQcDATAPBgNVHRMBAf8EBTADAQH/MCkGA1Ud
+        DgQiBCDrsHpXVTM4z9d1PG6j73WAvcGNMbi+ijbxYxL5pY6OPTAKBggqhkjOPQQD
+        AgNIADBFAiEA6tVz4hUsRN5x6ZDW6uiFH34H0+561qa2FiazmswuQCcCICIgCg2b
+        A1ljv3HOzfFttFdXyv/70o98ofq5KaFlQjCD
+        -----END CERTIFICATE-----
+        
+    grpcOptions:
+      ssl-target-name-override: peer0.org1.example.com
+      hostnameOverride: peer0.org1.example.com
+  peer1.org1.example.com:
+    url: grpcs://localhost:8051
+    tlsCACerts:
+      pem: |
+        -----BEGIN CERTIFICATE-----
+        MIICVzCCAf2gAwIBAgIQP00yHJhxKaZAaGbNKnF8+zAKBggqhkjOPQQDAjB2MQsw
+        CQYDVQQGEwJVUzETMBEGA1UECBMKQ2FsaWZvcm5pYTEWMBQGA1UEBxMNU2FuIEZy
+        YW5jaXNjbzEZMBcGA1UEChMQb3JnMS5leGFtcGxlLmNvbTEfMB0GA1UEAxMWdGxz
+        Y2Eub3JnMS5leGFtcGxlLmNvbTAeFw0yMDAzMDYxNjM1MDBaFw0zMDAzMDQxNjM1
+        MDBaMHYxCzAJBgNVBAYTAlVTMRMwEQYDVQQIEwpDYWxpZm9ybmlhMRYwFAYDVQQH
+        Ew1TYW4gRnJhbmNpc2NvMRkwFwYDVQQKExBvcmcxLmV4YW1wbGUuY29tMR8wHQYD
+        VQQDExZ0bHNjYS5vcmcxLmV4YW1wbGUuY29tMFkwEwYHKoZIzj0CAQYIKoZIzj0D
+        AQcDQgAEIFSdNlAXsBqbYtEq5VE1Hb97RuSo1U7QmhqZz2+vvyFvyefxCSSsQS43
+        jcmRmpaa1/LbGWJ10v+KBAPpfXZmjKNtMGswDgYDVR0PAQH/BAQDAgGmMB0GA1Ud
+        JQQWMBQGCCsGAQUFBwMCBggrBgEFBQcDATAPBgNVHRMBAf8EBTADAQH/MCkGA1Ud
+        DgQiBCDrsHpXVTM4z9d1PG6j73WAvcGNMbi+ijbxYxL5pY6OPTAKBggqhkjOPQQD
+        AgNIADBFAiEA6tVz4hUsRN5x6ZDW6uiFH34H0+561qa2FiazmswuQCcCICIgCg2b
+        A1ljv3HOzfFttFdXyv/70o98ofq5KaFlQjCD
+        -----END CERTIFICATE-----
+        
+    grpcOptions:
+      ssl-target-name-override: peer1.org1.example.com
+      hostnameOverride: peer1.org1.example.com
+certificateAuthorities:
+  ca.org1.example.com:
+    url: https://localhost:7054
+    caName: ca-org1
+    tlsCACerts:
+      pem: |
+        -----BEGIN CERTIFICATE-----
+        MIICUTCCAfigAwIBAgIRAMla7lcLYq/9st8DeT1EOhwwCgYIKoZIzj0EAwIwczEL
+        MAkGA1UEBhMCVVMxEzARBgNVBAgTCkNhbGlmb3JuaWExFjAUBgNVBAcTDVNhbiBG
+        cmFuY2lzY28xGTAXBgNVBAoTEG9yZzEuZXhhbXBsZS5jb20xHDAaBgNVBAMTE2Nh
+        Lm9yZzEuZXhhbXBsZS5jb20wHhcNMjAwMzA2MTYzNTAwWhcNMzAwMzA0MTYzNTAw
+        WjBzMQswCQYDVQQGEwJVUzETMBEGA1UECBMKQ2FsaWZvcm5pYTEWMBQGA1UEBxMN
+        U2FuIEZyYW5jaXNjbzEZMBcGA1UEChMQb3JnMS5leGFtcGxlLmNvbTEcMBoGA1UE
+        AxMTY2Eub3JnMS5leGFtcGxlLmNvbTBZMBMGByqGSM49AgEGCCqGSM49AwEHA0IA
+        BCoDoi69pMQuQ+iggCW1ulQTqtNgUo5r39eEmFwulQi97hr6M5DILh9pCKBdveE+
+        1M0nNmo8ltadzCnaCriU+SijbTBrMA4GA1UdDwEB/wQEAwIBpjAdBgNVHSUEFjAU
+        BggrBgEFBQcDAgYIKwYBBQUHAwEwDwYDVR0TAQH/BAUwAwEB/zApBgNVHQ4EIgQg
+        pctFLb52UfcrmKBq/ao0+JB9iGtiieDUca9I7sPxCR4wCgYIKoZIzj0EAwIDRwAw
+        RAIge6lgiBV/0g10LONIeI/QOhz7NmKR7BO06fzm5k+fyk8CIBoJpho/Jq+JQJqm
+        zcoAkDLt6TrYWMNhOHkgi7k/5K5V
+        -----END CERTIFICATE-----
+        
+    httpOptions:
+      verify: false
+=======
 ---
 name: first-network-org1
 version: 1.0.0
@@ -86,3 +176,4 @@ certificateAuthorities:
         
     httpOptions:
       verify: false
+>>>>>>> fecf2629ef2a022979d0294f06d3ff8e81de29a0
