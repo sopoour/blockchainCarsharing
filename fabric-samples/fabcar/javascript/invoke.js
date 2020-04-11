@@ -36,22 +36,19 @@ async function main() {
         // Get the contract from the network.
         const contract = network.getContract('fabcar');
 
-        // Submit the specified transaction.
-        // createCar transaction - requires 5 argument, ex: ('createCar', 'CAR12', 'Honda', 'Accord', 'Black', 'Tom')
-        // changeCarOwner transaction - requires 2 args , ex: ('changeCarOwner', 'CAR10', 'Dave')
-        //TRY: add rfidData as that is the returned object in the RFID_subscribe,js so e.g. rfidData.rfidData.carKey
-
+        //Connect to Broker
         console.log("connecting to broker");
         const client = mqtt.connect("mqtt://192.168.43.217");
         var success = false;
-        
+
+        //Subscribe to topic
         client.on("connect", () =>{
             console.log("Subscribing");
             client.subscribe("rfidData");
             console.log("Please hold your tag on the RFID reader. Wait...");
         });
         
-
+        //listen to a message and submit respective transaction
         client.on("message", (topic, message) =>{
             var rfidPayload = JSON.parse(message.toString());
             var carKeyIn = rfidPayload.carKey;
