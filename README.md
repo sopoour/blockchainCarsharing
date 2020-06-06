@@ -20,3 +20,46 @@ This repo represents a prototype built for our Master Thesis. The prototype repr
 * Transaction is submitted and verified in the blockchain checking whether the user ID matches with the one stored in the ledger
 * End-result: having a submitted transaction and a newly created block
 
+### Directiory Structure & Explanation for deployment:
+├───fabric-samples
+│   ├───balance-transfer
+│   │   ├─── ...
+│   ├───basic-network
+│   │   ├─── ...
+│   ├───bin
+│   ├───chaincode
+│   │   ├─── ...
+│   │   **├───fabcar
+│   │   │   ├─── ...
+│   │   │   ├───javascript
+│   │   │   │   └───lib**
+│   │   │   ├─── ...
+│   │   ├─── ...
+│   ├───chaincode-docker-devmode
+│   │   └─── ...
+│   ├───ci
+│   ├───commercial-paper
+│   │   ├─── ...
+│   ├───docs
+│   **├───fabcar
+│   │   ├─── ...
+│   │   ├───javascript
+│   │   │   └───Fetched_Blocks
+│   │   ├─── ...
+│   ├───first-network
+│   │   ├───base
+│   │   ├───channel-artifacts
+│   │   ├───org3-artifacts
+│   │   └───scripts**
+│   ├───high-throughput
+│   │   ├─── ...
+│   ├───interest_rate_swaps
+│   │   ├─── ...
+│   ├───off_chain_data
+│   └───scripts
+│       ├───ci_scripts
+│       └───Jenkins_Scripts
+└───rfid
+    ├───Example
+    ├───SPI-Py
+    ├───src
