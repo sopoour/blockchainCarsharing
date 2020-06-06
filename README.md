@@ -21,6 +21,17 @@ This repo represents a prototype built for our Master Thesis. The prototype repr
 * End-result: having a submitted transaction and a newly created block
 
 ### Directiory Structure & Explanation for deployment:
+
+See an entire deployment demo in this video [here](https://drive.google.com/file/d/1wk_z-Ti5fUyFVi7dkvbGx0Vwpg0IA3VX/view) as well as more about the whole development enviorment and step-by-step guide to deploy in our [Master Thesis](https://drive.google.com/file/d/1mdVALF9bJ8md4Grnq4ViH3_eP_C05UzR/view?usp=sharing)
+</br></br>
+For a first getting started and overview of the relevant programs in the directories:
+1. Run in VM the shell script <code>./startFabric.sh javascript</code> stored in <code>fabcar</code> folder in order to start the first-network creating two organizations and a channel as well as to deploy the smart contract <code>fabcar</code> stored in <code>chaincode </code> > <code>fabcar</code> > <code> lib </code>. 
+1. Run the node.js <code>node enrollAdmin.js</code> and <code>node registerUser.js</code> in the folder <code>fabcar</code> > <code>javascript</code> in order to register the two users admin and user1
+1. Run the node.js <code>node invoke.js</code> in the same folder as before
+1. Run on RPi the Python file <code>read_publis.py</code> in the <code>rfid</code> folder in order to publish a topic to the network </br></br>
+
+Here the directory structure:
+```bash
 ├───fabric-samples
 │   ├───balance-transfer
 │   │   ├─── ...
@@ -29,10 +40,10 @@ This repo represents a prototype built for our Master Thesis. The prototype repr
 │   ├───bin
 │   ├───chaincode
 │   │   ├─── ...
-│   │   **├───fabcar
+│   │   ├───fabcar
 │   │   │   ├─── ...
 │   │   │   ├───javascript
-│   │   │   │   └───lib**
+│   │   │   │   └───lib
 │   │   │   ├─── ...
 │   │   ├─── ...
 │   ├───chaincode-docker-devmode
@@ -41,7 +52,7 @@ This repo represents a prototype built for our Master Thesis. The prototype repr
 │   ├───commercial-paper
 │   │   ├─── ...
 │   ├───docs
-│   **├───fabcar
+│   ├───fabcar
 │   │   ├─── ...
 │   │   ├───javascript
 │   │   │   └───Fetched_Blocks
@@ -50,7 +61,7 @@ This repo represents a prototype built for our Master Thesis. The prototype repr
 │   │   ├───base
 │   │   ├───channel-artifacts
 │   │   ├───org3-artifacts
-│   │   └───scripts**
+│   │   └───scripts
 │   ├───high-throughput
 │   │   ├─── ...
 │   ├───interest_rate_swaps
@@ -63,3 +74,4 @@ This repo represents a prototype built for our Master Thesis. The prototype repr
     ├───Example
     ├───SPI-Py
     ├───src
+'''
