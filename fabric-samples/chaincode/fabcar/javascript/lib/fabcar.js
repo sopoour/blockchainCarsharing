@@ -142,28 +142,32 @@ class FabCar extends Contract {
             throw new Error(`${carKey} does not exist`);
         }
 
-        const car = JSON.parse(carKeyAsBytes.toString());
+        const car = JSON.parse(carKeyAsBytes.toString()); //parsing to JSON object to access car's attributes
         
+        //Check if the sent renterID corresponds with the ID in the respective car object
         if (car.renterID !== renterID) {
             throw new Error(`${renterID} does not match with any car request. Please request a car first!`);
         }
 
+        //Check if car already unlocked
         if (car.status == "unlocked") {
             throw new Error(`Car is already unlocked.`);
         }
+        
+        //only if the previous status is located the car object in ledger is supposed to be updated
+        if (car.status == "located"){
+            //change status of car from located to unlocked
+            car.status = "unlocked"
+            car.startTime = startTime.toString()
             
-        //change status of car from requested to open
-        car.status = "unlocked"
-        car.startTime = startTime.toString()
-        
-        //create payload object which is sent to client application & back to RPi
-        ctx.stub.setEvent(events.TransferConfirmed,Buffer.from(JSON.stringify({
-            statusCar: car.status,
-        })));
-        
-
-        //Change state of our car in ledger
-        await ctx.stub.putState(carKey, Buffer.from(JSON.stringify(car)));
+            //create payload object which is sent to client application & back to RPi
+            ctx.stub.setEvent(events.TransferConfirmed,Buffer.from(JSON.stringify({
+                statusCar: car.status,
+            })));
+            
+            //Change state of our leased car in ledger
+            await ctx.stub.putState(carKey, Buffer.from(JSON.stringify(car)));
+        }
 
     }
 
