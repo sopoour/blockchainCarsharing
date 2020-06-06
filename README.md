@@ -20,7 +20,7 @@ This repo represents a prototype built for our Master Thesis. The prototype repr
 * Transaction is submitted and verified in the blockchain checking whether the user ID matches with the one stored in the ledger
 * End-result: having a submitted transaction and a newly created block
 
-### Directiory Structure & Explanation for deployment:
+### Directory Structure & Explanation for deployment:
 
 See an entire deployment demo in this video [here](https://drive.google.com/file/d/1wk_z-Ti5fUyFVi7dkvbGx0Vwpg0IA3VX/view) as well as more about the whole development enviorment and step-by-step guide to deploy in our [Master Thesis](https://drive.google.com/file/d/1mdVALF9bJ8md4Grnq4ViH3_eP_C05UzR/view?usp=sharing)
 </br></br>
