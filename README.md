@@ -1,5 +1,5 @@
 # Prototype for a Blockchain-based Car sharing Platform
-This repo represents a prototype built for our Master Thesis. The prototype represents one transaction "unlock a car" wthin the use case "keyless vehicle access control". In this way, it simulates the unlocking of a car by having a Raspberry Pi representing the server of the car, an RFID sensor as the car lock, and the RFID tag as the keyless option to open the door. Overall, our focus in this prototype has been to explore the interaction between an IoT device (RFID with RPi) and the blockchain network (Hyperledger Fabric).
+This repo represents a prototype built for our Master Thesis. The prototype represents one transaction "unlock a car" wthin the use case "keyless vehicle access control". In this way, it simulates the unlocking of a car by having a Raspberry Pi representing the server of the car, an RFID sensor as the car lock, and the RFID tag as the keyless option to open the door. The transaction is verified in the blockchain network of Hyperledger Fabric. Overall, our focus in this prototype has been to explore the interaction between an IoT device (RFID with RPi) and the blockchain network (Hyperledger Fabric).
 </br></br>The basic setup is as followed:
 
 ### Hardware:
