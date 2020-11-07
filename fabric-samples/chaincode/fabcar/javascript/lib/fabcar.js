@@ -134,7 +134,7 @@ class FabCar extends Contract {
     //carKey = similar to a booking number 
     //as soon as the leasee registers a car, a carKey is generated (e.g. CAR1) which the renter will get
     //renter types in this carKey in its app (in real life), in our case he writes it on the RFID tag
-    async openCar (ctx, carKey, renterID, startTime) {
+    async openCar (ctx, carKey, renterID, timeStamp) {
         console.info("openCar Process is starting");
 
         const carKeyAsBytes = await ctx.stub.getState(carKey); //get the carKey from chaincode state
@@ -158,9 +158,9 @@ class FabCar extends Contract {
         if (car.status == "located"){
             //change status of car from located to unlocked
             car.status = "unlocked"
-            car.startTime = startTime.toString()
+            car.startTime = timeStamp.toString()
             
-            //create payload object which is sent to client application & back to RPi
+            //could be further used to send a message back to RPi
             ctx.stub.setEvent(events.TransferConfirmed,Buffer.from(JSON.stringify({
                 statusCar: car.status,
             })));

@@ -6,7 +6,7 @@
 
 const { FileSystemWallet, Gateway } = require('fabric-network')
 const path = require('path');
-const mqtt = require("mqtt");
+const mqtt = require("async-mqtt");
 
 const ccpPath = path.resolve(__dirname, '..', '..', 'first-network', 'connection-org1.json');
 
@@ -36,20 +36,71 @@ async function main() {
         // Get the contract from the network.
         const contract = network.getContract('fabcar');
 
-        //Connect to Broker
-        console.log("connecting to broker");
-        const client = mqtt.connect("mqtt://192.168.43.217");
-        var success = false;
+        async function run(){
+             //Connect to Broker
+            console.log("connecting to broker");
+        
+            const client = await mqtt.connectAsync("mqtt://192.168.0.25");
+            var success = false;
+            console.log("Starting with MQTT");
+            try{
+                console.log("Subscribing");
+                await client.subscribe("rfidData");
+                console.log("Please hold your tag on the RFID reader. Wait...");
+                
+                await client.on("message", (topic, message) =>{
+                    var rfidPayload = JSON.parse(message.toString());
+                    console.log(rfidPayload);
+                    var carKeyIn = rfidPayload.carKey;
+                    var renterIDIn = rfidPayload.renterID;
+                    var timestampIn = rfidPayload.timestamp;
+                    console.log(rfidPayload);
+        
+                    contract.submitTransaction('openCar', carKeyIn, renterIDIn, timestampIn);
+                    success = true;
+                    console.log("Transaction successful? " + success);
+                    // Publish new topic back to RPi
+                    if (success == true){
+                        client.publish("RpiActuator", "Verified")
+                        console.log("Published Topic")
+                    }
+                });
+
+                await client.stream.on('error', (err) => {
+                    console.log('errorMessage', err);
+                    client.end()
+                });       
+        
+                await client.on("offline",() =>{
+                    console.log("offline");
+                });
+        
+                await client.on("reconnect", ()=>{
+                    console.log("reconnect");
+                });
+        
+                // This line doesn't run until the server responds to the publish
+                await client.end();
+                console.log("DONE")
+            }
+            catch(error){
+                console.error(`Failed Submission: ${error}`);
+                process.exit(1);
+            }
+        }
+
+        run()
 
         //Subscribe to topic
-        client.on("connect", () =>{
+        /*await client.on("connect", () =>{
             console.log("Subscribing");
             client.subscribe("rfidData");
             console.log("Please hold your tag on the RFID reader. Wait...");
         });
         
+        
         //listen to a message and submit respective transaction
-        client.on("message", (topic, message) =>{
+        await client.on("message", (topic, message) =>{
             var rfidPayload = JSON.parse(message.toString());
             var carKeyIn = rfidPayload.carKey;
             var renterIDIn = rfidPayload.renterID;
@@ -60,27 +111,19 @@ async function main() {
             success = true;
             console.log("Success? " + success);
             //client.end()
-            return success;
+            // Publish new topic back to RPi
+            if (success == true){
+                client.publish("RpiActuator", "Verified")
+                console.log("Published Topic")
+            }
+            return success, client.end();
         });
+        */
 
-        client.stream.on('error', (err) => {
-            console.log('errorMessage', err);
-            client.end()
-        });       
-
-        client.on("offline",() =>{
-            console.log("offline");
-        });
-
-        client.on("reconnect", ()=>{
-            console.log("reconnect");
-        });
-
+        
         // Disconnect from the gateway.
-        if (success === true){
-            client.end();
-            gateway.disconnect();
-        }
+        await gateway.disconnect();
+
            
     } catch (error) {
         console.error(`Failed to submit transaction: ${error}`);
