@@ -40,7 +40,8 @@ async function main() {
         //https://medium.com/jspoint/javascript-promises-and-async-await-as-fast-as-possible-d7c8c8ff0abc
         //https://stackoverflow.com/questions/63850875/async-function-inside-mqtt-message-event
         //https://dmitripavlutin.com/javascript-async-await/#:~:text=A%20function%20handling%20an%20asynchronous,%3A%20const%20resolvedValue%20%3D%20await%20promise%20.
-
+        //https://medium.com/javascript-in-plain-english/javascript-async-await-and-promises-explained-like-youre-five-years-old-61733751e9a5
+        
         async function run(){
              //Connect to Broker
             console.log("connecting to broker");
